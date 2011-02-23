@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/TravelSearch" xmlns:tns="http://www.example.org/TravelSearch" elementFormDefault="qualified">
+<xsd:element name="TravelSearch" type="TravelSearch">
+	<xsd:complexType id="TravelSearch">
+		<xsd:sequence>
+			<xsd:element name="from" type="string"></xsd:element>
+			<xsd:element name="to" type="string"></xsd:element>
+			<xsd:element name="departuredate" type="string"></xsd:element>
+			<xsd:element name="returndate" type="string"></xsd:element>
+			<xsd:element name="maxstops" type="integer"></xsd:element> 
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+</schema>
