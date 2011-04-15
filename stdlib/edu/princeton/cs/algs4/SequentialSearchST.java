@@ -92,7 +92,7 @@ public class SequentialSearchST<Key, Value> {
 		return x;
 	}
 
-	// return all keys as an Iterable
+	// retu	rn all keys as an Iterable
 	public Iterable<Key> keys() {
 		Queue<Key> queue = new Queue<Key>();
 		for (Node x = first; x != null; x = x.next)

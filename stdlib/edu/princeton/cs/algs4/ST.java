@@ -10,8 +10,8 @@ package edu.princeton.cs.algs4;
  *
  *************************************************************************/
 
-import java.util.TreeMap;
 import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * This class represents an ordered symbol table. It assumes that the elements
