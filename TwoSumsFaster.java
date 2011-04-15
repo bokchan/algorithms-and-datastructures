@@ -54,7 +54,7 @@ class TwoSumsFasterRunner
 	public static void main(String[] args) throws IOException
 	{
 		TwoSumsFaster twosum = new TwoSumsFaster();
-		twosum.array  = TwoSumsFaster.createArray("1Kints.txt");
+		twosum.array  = TwoSumsFaster.createArray(args[0].toString());
 		StdOut.println(twosum.find());
 	}
 }
