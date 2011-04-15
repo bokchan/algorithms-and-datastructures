@@ -1,0 +1,39 @@
+<uml>
+   <greenVersion="30500"/>
+   <type>
+      <name="=Algorithms and Datastructures/trunk<experiments{BinaryTreeQueue.java[BinaryTreeQueue"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="0"/>
+      <y="0"/>
+   </type>
+   <type>
+      <name="=Algorithms and Datastructures/trunk<experiments{BinaryTreeQueue.java[BinaryTreeQueue[Node"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="132"/>
+      <y="342"/>
+   </type>
+   <type>
+      <name="=Algorithms and Datastructures/trunk<experiments{BinaryTreeQueue.java[BinaryTreeQueue[TreeIterator"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="519"/>
+      <y="73"/>
+   </type>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=Algorithms and Datastructures/trunk<experiments{BinaryTreeQueue.java[BinaryTreeQueue"/>
+      <targetType="=Algorithms and Datastructures/trunk<experiments{BinaryTreeQueue.java[BinaryTreeQueue[Node"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <sourceType="=Algorithms and Datastructures/trunk<experiments{BinaryTreeQueue.java[BinaryTreeQueue"/>
+      <targetType="=Algorithms and Datastructures/trunk<experiments{BinaryTreeQueue.java[BinaryTreeQueue[TreeIterator"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+</uml>
+
