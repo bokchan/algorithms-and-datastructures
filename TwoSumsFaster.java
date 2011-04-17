@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import edu.princeton.cs.stdlib.StdOut;
+
 
 public class TwoSumsFaster 
 { 

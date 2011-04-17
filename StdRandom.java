@@ -30,6 +30,8 @@
 
 import java.util.Random;
 
+import edu.princeton.cs.stdlib.StdOut;
+
 /**
  *  <i>Standard random</i>. This class provides methods for generating
  *  random number from various distributions.
