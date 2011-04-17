@@ -1,5 +1,7 @@
 import java.util.Arrays;
 
+import edu.princeton.cs.stdlib.StdOut;
+
 /*************************************************************************
  *  Compilation:  javac FourSum.java
  *  Execution:    java FourSum < input.txt

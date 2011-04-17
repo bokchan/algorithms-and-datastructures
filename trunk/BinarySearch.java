@@ -8,6 +8,10 @@
 
 import java.util.Arrays;
 
+import edu.princeton.cs.stdlib.In;
+import edu.princeton.cs.stdlib.StdIn;
+import edu.princeton.cs.stdlib.StdOut;
+
 public class BinarySearch {
 
     // precondition: array a[] is sorted
