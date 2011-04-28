@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -10,49 +9,56 @@ public class RandomPermutationTester {
 
 	private static HashSet<Integer> hash;
 	private static Long perm = 0L;
-	
+
 	private static int N = 0;
 	private static int count = 0;
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		N = 4;
+
+		N = 7;
 		hash = new HashSet<Integer>();
 		perm = factorial(N);
-		
+
 		Object[] o = new Object[N];
 		for (int i = 0;i < N;i++) o[i] = i+1; 
 		System.out.println("N!" + perm);
 		hash.add(Arrays.deepHashCode(o));
 		System.out.println(Arrays.toString(o));
-		permutate(o,0);
-		System.out.println(count);
-	}
 
+		for (int n = 0; n < 1; n++) {
+			permutate(o);
+			System.out.println(count);
+			for (int i = 0;i < N;i++) o[i] = i+1;
+			hash = new HashSet<Integer>();
+			count = 0;
+		}	
+	}
 
 	/***
 	 * Generates permutations of the input Object[] 
 	 * @param o
 	 * @param idx
 	 */
-	public static void permutate(Object[] o, int idx) {
+	public static void permutate(Object[] o) {
 		//System.out.println(idx);
-		System.out.println("hash: " + hash.size());
+		//System.out.println("hash: " + hash.size());
 		if (hash.size() < perm) {
 			count++;
-			Object[] tmp = threeEx(o, idx);
-			System.out.println("o: "+ Arrays.toString(tmp));
-			if (!hash.contains(Arrays.deepHashCode(tmp))) hash.add(Arrays.deepHashCode(tmp));
+			o = threeEx(o);
+			//System.out.println("o: "+ Arrays.toString(o));
+			if (!hash.contains(Arrays.deepHashCode(o))) hash.add(Arrays.deepHashCode(o));
+
+			o = twoEx(o);
+			//System.out.println("o: "+ Arrays.toString(o));
+
+			if (!hash.contains(Arrays.deepHashCode(o))) hash.add(Arrays.deepHashCode(o));
 			
-			tmp = twoEx(tmp, idx);
-			System.out.println("o: "+ Arrays.toString(tmp));
-			
-			if (!hash.contains(Arrays.deepHashCode(tmp))) hash.add(Arrays.deepHashCode(tmp));
-			
-			if (idx == o.length-1) idx = 0; 
-			else idx +=1;			
-			permutate(tmp, idx);
-		}
+			permutate(o);
+		} else return ;
 	}
-	
+
 	private static String toString(Object[] o) {
 		String out = "";
 		for (Object i : o) out += i.toString();
@@ -67,15 +73,16 @@ public class RandomPermutationTester {
 	 * @param i
 	 * @return
 	 */
-	public static Object[] threeEx(Object[] o, int i) {
-	
-			Object tmp = o[i % N];
-			o[i] = o[(i+1) % N];
-			o[(i+1) % N] = tmp;
-			tmp = o[(i+2) % N];
-			o[(i+2) % N] = o[i %N];
-			o[i % N] = tmp;
-			return o;
+	public static Object[] threeEx(Object[] o) {
+		int i = StdRandom.uniform(N);
+		Object tmpTwo = o[i % N];
+		o[i] = o[(i+1) % N];
+		o[(i+1) % N] = tmpTwo;
+		tmpTwo = o[(i+2) % N];
+		o[(i+2) % N] = o[i %N];
+		o[i % N] = tmpTwo;
+		tmpTwo = null;
+		return o;
 	}
 
 	/***
@@ -85,12 +92,14 @@ public class RandomPermutationTester {
 	 * @param i
 	 * @return
 	 */
-	private static Object[] twoEx(Object[] o, int i) {
-			Object tmp = o[i % N];
-			int j = (i+1) % N;
-			o[i] = o[j];
-			o[j] = tmp;
-			return o;
+	private static Object[] twoEx(Object[] o) {
+		int i = StdRandom.uniform(N);
+		Object tmp = o[i % N];
+		int j = (i+1) % N;
+		o[i] = o[j];
+		o[j] = tmp;
+		tmp = null;
+		return o;
 	} 
 
 	/***
@@ -105,4 +114,16 @@ public class RandomPermutationTester {
 		}
 		return (long) Math.ceil(Math.pow(10,log));
 	}
+	
+	/***
+	 * Returns binomial C chooses k 
+	 * @param C
+	 * @param k
+	 * @return
+	 */
+	private static long binom(int C, int k) {
+		if (C <= k ) return 1;
+		return (factorial(C)/((factorial(k)*factorial(C-k))));
+	}
+
 }
