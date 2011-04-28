@@ -1,0 +1,107 @@
+<uml>
+   <greenVersion="30500"/>
+   <type>
+      <name="=Algorithms and Datastructures/trunk<wordladder{IDiGraph.java[IDiGraph"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="338"/>
+      <y="57"/>
+   </type>
+   <type>
+      <name="=Algorithms and Datastructures/trunk<wordladder{DiGraph.java[DiGraph"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="299"/>
+      <y="334"/>
+   </type>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
+      <sourceType="=Algorithms and Datastructures/trunk<wordladder{DiGraph.java[DiGraph"/>
+      <targetType="=Algorithms and Datastructures/trunk<wordladder{IDiGraph.java[IDiGraph"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <type>
+      <name="=Algorithms and Datastructures/trunk<wordladder{IDigitizer.java[IDigitizer"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="635"/>
+      <y="173"/>
+   </type>
+   <type>
+      <name="=Algorithms and Datastructures/trunk<wordladder{IVertex.java[IVertex"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="31"/>
+      <y="20"/>
+   </type>
+   <type>
+      <name="=Algorithms and Datastructures/trunk<wordladder{StringDigitizer.java[StringDigitizer"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="626"/>
+      <y="268"/>
+   </type>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
+      <sourceType="=Algorithms and Datastructures/trunk<wordladder{StringDigitizer.java[StringDigitizer"/>
+      <targetType="=Algorithms and Datastructures/trunk<wordladder{IDigitizer.java[IDigitizer"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <type>
+      <name="=Algorithms and Datastructures/trunk<wordladder{Vertex.java[Vertex"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="3"/>
+      <y="338"/>
+   </type>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.composition.CompositionPart"/>
+      <sourceType="=Algorithms and Datastructures/trunk<wordladder{Vertex.java[Vertex"/>
+      <targetType="=Algorithms and Datastructures/trunk<wordladder{IVertex.java[IVertex"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
+      <sourceType="=Algorithms and Datastructures/trunk<wordladder{Vertex.java[Vertex"/>
+      <targetType="=Algorithms and Datastructures/trunk<wordladder{Vertex.java[Vertex"/>
+      <bendpoints>
+         <bendpoint>
+            <x="40"/>
+            <y="0"/>
+         </bendpoint>
+         <bendpoint>
+            <x="40"/>
+            <y="-40"/>
+         </bendpoint>
+         <bendpoint>
+            <x="0"/>
+            <y="-40"/>
+         </bendpoint>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
+      <sourceType="=Algorithms and Datastructures/trunk<wordladder{Vertex.java[Vertex"/>
+      <targetType="=Algorithms and Datastructures/trunk<wordladder{IVertex.java[IVertex"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <sourceType="=Algorithms and Datastructures/trunk<wordladder{DiGraph.java[DiGraph"/>
+      <targetType="=Algorithms and Datastructures/trunk<wordladder{Vertex.java[Vertex"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <type>
+      <name="=Algorithms and Datastructures/trunk<wordladder{VertexUtil.java[VertexUtil"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="631"/>
+      <y="37"/>
+   </type>
+</uml>
+

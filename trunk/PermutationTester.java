@@ -1,96 +1,95 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
 public class PermutationTester {
 
-	/**
-	 * @param args
+	/****
+	 * For N = 9
+	 * E = New randomly generated configuration 
+P(E)= 208/5,7319223985890652557319223985891e-4
 	 */
-
-	private static HashSet<Integer> hash;
-	private static Long perm = 0L;
+	private static HashSet<Integer> hash; // HashSet holding unique permutations
+	private static Long perm = 0L; // N! 
+	private static int N = 0 ; // Size of the variable domain 
+	private static int count = 0; // Number of iterations before N! permutaions is found  
+	private static Object[] o; // Object array of vars
+	private static long sState1 = binom(N, N-3);
+	private static long sState2 = binom(N, N-2);
 	
-	private static int N = 0;
-	private static int count = 0;
 	public static void main(String[] args) {
-		N = 4;
-		hash = new HashSet<Integer>();
+		N = 9;
+		hash = new HashSet<Integer>(); 
 		perm = factorial(N);
-		
-		Object[] o = new Object[N];
+
+		o = new Object[N];
 		for (int i = 0;i < N;i++) o[i] = i+1; 
 		System.out.println("N!" + perm);
 		hash.add(Arrays.deepHashCode(o));
 		System.out.println(Arrays.toString(o));
-		permutate(o,0);
-		System.out.println(count);
+		permutate();
+		System.out.println("hashsize:" + hash.size());
+		System.out.println("count:" +  count);
 	}
 
-
 	/***
-	 * Generates permutations of the input Object[] 
+	 * Generates permutations of the Object[]  
 	 * @param o
 	 * @param idx
 	 */
-	public static void permutate(Object[] o, int idx) {
-		//System.out.println(idx);
+	private static void permutate() {
+
 		System.out.println("hash: " + hash.size());
-		if (hash.size() < perm) {
+		while (hash.size() < perm) {
+			System.out.println("Hashsize: " +  hash.size());
 			count++;
-			Object[] tmp = threeEx(o, idx);
-			System.out.println("o: "+ Arrays.toString(tmp));
-			if (!hash.contains(Arrays.deepHashCode(tmp))) hash.add(Arrays.deepHashCode(tmp));
-			
-			tmp = twoEx(tmp, idx);
-			System.out.println("o: "+ Arrays.toString(tmp));
-			
-			if (!hash.contains(Arrays.deepHashCode(tmp))) hash.add(Arrays.deepHashCode(tmp));
-			
-			if (idx == o.length-1) idx = 0; 
-			else idx +=1;			
-			permutate(tmp, idx);
+
+			threeEx();
+			if (!hash.contains(Arrays.deepHashCode(o))) hash.add(Arrays.deepHashCode(o));
+			//System.out.println(toString(o));
+			twoEx();
+			if (!hash.contains(Arrays.deepHashCode(o))) hash.add(Arrays.deepHashCode(o));
+			//System.out.println(toString(o));
 		}
 	}
-	
+
+	/***
+	 * Returns a string representation of 
+	 * @param o
+	 * @return
+	 */
 	private static String toString(Object[] o) {
-		String out = "";
-		for (Object i : o) out += i.toString();
-		return out;
+		
+		Object[] tmp = o.clone(); 
+		return Arrays.toString(tmp);
 	}
 
 	/***
-	 * Rotates three variables in the Object[].
-	 * Chooses 3 variables starting at o[i]. 
-	 * If i exceeds N-1 a new array is copied with all elements shifted right   
-	 * @param o
-	 * @param i
-	 * @return
+	 * Rotates three variables right in an Object[].
+	 * Chooses 3 consecutive indices % N starting at a random 
+	 * number between 0 and N, where N is the size of the Object[]  
 	 */
-	public static Object[] threeEx(Object[] o, int i) {
-			
-			Object tmp = o[i % N];
-			o[i] = o[(i+1) % N];
-			o[(i+1) % N] = tmp;
-			tmp = o[(i+2) % N];
-			o[(i+2) % N] = o[i %N];
-			o[i % N] = tmp;
-			return o;
+	private  static void threeEx() {		
+		int idx1 = (int) uniform(N);
+		Object tmpTwo = o[idx1];
+		o[idx1] = o[(idx1+1) % N];
+		o[(idx1+1) % N] = tmpTwo;
+		tmpTwo = o[(idx1+2) % N];
+		o[(idx1+2) % N] = o[idx1];
+		o[idx1] = tmpTwo;
+		tmpTwo = null;
 	}
 
 	/***
-	 * Swaps variable o[i] and o[i+1]. 
-	 * If i exceeds N-1 o[0] and o[i] are swapped  
-	 * @param o
-	 * @param i
-	 * @return
+	 * Swaps variable o[i] and o[i+1], where i is a random int between 0 and N-1 
+	 * If i equals N-1 o[i] and o[0] are swapped  
 	 */
-	private static Object[] twoEx(Object[] o, int i) {
-			Object tmp = o[i % N];
-			int j = (i+1) % N;
-			o[i] = o[j];
-			o[j] = tmp;
-			return o;
+	private static void twoEx() {
+		int idx1 = (int) uniform(N);
+		int idx2 = uniform(N);
+		Object tmp = o[idx1];
+		o[idx1] = o[idx2];
+		o[idx2] = tmp;		
+		tmp = null;
 	} 
 
 	/***
@@ -99,10 +98,28 @@ public class PermutationTester {
 	 * @return
 	 */
 	private static Long factorial(int f) {
-		double log = 0.0;
-		for (int i = 1; i <= f; i++ ) {
-			log += Math.log10(i);
+		long fac =1;
+		for (int i = 1; i <= f; i++) {
+			fac *= i;
 		}
-		return (long) Math.ceil(Math.pow(10,log));
+		return fac;
+	}
+	
+	/**
+     * Return an integer uniformly between 0 and N-1.
+     */
+    private static int uniform(int N) {
+        return (int) (Math.random() * N);
+    }
+    
+    /***
+	 * Returns binomial C chooses k 
+	 * @param C
+	 * @param k
+	 * @return
+	 */
+	private static long binom(int C, int k) {
+		if (C <= k ) return 1;
+		return (factorial(C)/((factorial(k)*factorial(C-k))));
 	}
 }

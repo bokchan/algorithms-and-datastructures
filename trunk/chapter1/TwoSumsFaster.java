@@ -10,8 +10,6 @@ public class TwoSumsFaster
 	int[] array=null;
 	public static int length;
 
-
-
 	public int find()
 	{
 		Arrays.sort(array);
