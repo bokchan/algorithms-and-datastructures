@@ -1,9 +1,10 @@
 package wordladder;
 
+
+import java.util.ArrayList;
 import java.util.Set;
 
-
-public interface IVertex<K>{
+public interface IVertex<K> extends Comparable<IVertex<K>>{
 	/***
 	 * Returns true if v is adjacent.     
 	 * @param v
@@ -19,7 +20,7 @@ public interface IVertex<K>{
 	 * Returns the vertice's value as a sorted char array   
 	 * @return
 	 */
-	public char[] getValueArray();
+	public ArrayList<Character> getValueArray();
 	/***
 	 * Returns the vertice's suffix as a sorted char array
 	 * @return
