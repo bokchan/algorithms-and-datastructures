@@ -1,19 +1,22 @@
+package wordladder;
 /**
  * 
  */
-package wordladder;
+
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
-
-import edu.princeton.cs.stdlib.Stopwatch;
 
 /**
  * 
@@ -23,25 +26,29 @@ import edu.princeton.cs.stdlib.Stopwatch;
 public class DiGraph<K> implements IDiGraph<K> {
 	private Map<K, IVertex<K>> vertices; // Map holding vertices
 	int count = 0;
-	
-	private Set<K> marked; 
-	
-	//An index for the sorted value of all vertices.           
-	private Map<Character, HashSet<IVertex<K>>> Index;
-	
-	 //An index for vertices and the first character of their sorted suffix
-	private Map<IVertex<K>, Character> Suffixes;
+
+	public Set<K> marked; 
+	//An index for all vertices over the alphabet 
+	HashMap<Character, HashSet<IVertex<K>>> KIndex;
+	//An index of the sub key in sorted order:
+	HashMap<String, HashSet<IVertex<K>>> SuffixIndex;
 	
 	private int E; // Number of edges 
 	private int V; // Number of vertices
 
+	private final Comparator<HashSet<IVertex<K>>> HashSetComparator = new Comparator<HashSet<IVertex<K>>>() {
+		public int compare(HashSet<IVertex<K>> o1, HashSet<IVertex<K>> o2) {
+			return Integer.valueOf(o1.size()).compareTo(o2.size());
+		}
+	};
+
 	public void buildGraph(String filename) throws IOException {
-		// Initialize variables 
+		// Initialize variables
 		vertices = new HashMap<K, IVertex<K>>();
 		marked = new HashSet<K>();
-		Suffixes = new HashMap<IVertex<K>, Character>();
-		Index = new HashMap<Character, HashSet<IVertex<K>>>();
-		
+		KIndex = new HashMap<Character, HashSet<IVertex<K>>>();
+		SuffixIndex = new HashMap<String, HashSet<IVertex<K>>>();
+
 		BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
 		Stopwatch w = new Stopwatch();
 
@@ -52,23 +59,27 @@ public class DiGraph<K> implements IDiGraph<K> {
 			s = s.toLowerCase(); 
 			Vertex<K> v = new Vertex<K>((K) s); // Create a new vertex 
 			vertices.put((K)s,v);
+
+			ArrayList<Character> vArray = v.getValueArray();
+			for (Character  c : vArray) {
+				if (KIndex.get(c) == null) KIndex.put(c, new HashSet<IVertex<K>>());
+				KIndex.get(c).add(v);
+			}
 			
-			Suffixes.put(v, v.getSuffixArray()[0]); // Add to suffix array 
-			
-			Character first = v.getValueArray()[0]; // Get the first character of the sorted value of the vertice  
-			Character second  = v.getValueArray()[1]; // Get the second character of the sorted value of the vertice
-			
-			// Add vertice to index 
-			if (Index.get(first) == null) Index.put(first, new HashSet<IVertex<K>>());
-			Index.get(first).add(v);
-			if (Index.get(second) == null) Index.put(second, new HashSet<IVertex<K>>());
-			Index.get(second).add(v);
+			if (SuffixIndex.get(String.valueOf(v.getSuffixArray()))== null) 
+			SuffixIndex.put(String.valueOf(v.getSuffixArray()), new HashSet<IVertex<K>>());			
 			V++;
 		}
+		
+		for (Entry<String,HashSet<IVertex<K>>> e : SuffixIndex.entrySet()) {
+			e.getValue().addAll(getIntersection(e.getKey()));
+		}
 
-		System.out.println("Read lines in: " + w.elapsedTime());
+		//System.out.println("Read lines in: " + w.elapsedTime());
+		//w = new Stopwatch();
+
+		System.out.println("Indexed suffixes in: " + w.elapsedTime());
 		w = new Stopwatch();
-
 		//Do a DFS searh to find all connected edges 
 		for (IVertex<K> v : vertices.values()) {
 			if (!marked.contains(v.getValue())) {
@@ -76,23 +87,32 @@ public class DiGraph<K> implements IDiGraph<K> {
 				dfs(v);
 			}
 		}
-		System.out.println("Built edges in: " + w.elapsedTime());
+		//System.out.println("Built edges in: " + w.elapsedTime());
+		KIndex = null;
+		marked = null;
 	}
+
 	/***
 	 * Builds graph using dfs
 	 * @param v
 	 */
 	public void dfs(IVertex<K> v) {
 		marked.add(v.getValue()); 
-		for (IVertex<K> w : getUnion(v)) {
+		for (IVertex<K> w : getIntersectedAdj(v)) {
 			count++;
-			if (!v.equals(w) && !v.adj().contains(w) && v.isNeighbour(w)) {
+			if (v.isNeighbour(w)) {
 				E++;
 				v.addEdge(w);
 				if (!marked.contains(w.getValue())) dfs(w);
 			}
 		}
 	} 
+	
+	private Set<IVertex<K>> getIntersectedAdj(IVertex<K> v) {
+		HashSet<IVertex<K>> adj = new HashSet<IVertex<K>>(SuffixIndex.get(String.valueOf(v.getSuffixArray())));
+		adj.remove(v);
+		return adj;
+	}
 
 	/***
 	 * Returns the set of vertices where first or second 
@@ -100,10 +120,22 @@ public class DiGraph<K> implements IDiGraph<K> {
 	 * @param v
 	 * @return
 	 */
-	private Set<IVertex<K>> getUnion(IVertex<K> v) {
-		return Index.get(Suffixes.get(v));
+	private Set<IVertex<K>> getIntersection(String suffix) {
+		ArrayList<HashSet<IVertex<K>>> sets = new ArrayList<HashSet<IVertex<K>>>();
+		
+		for (char c : suffix.toCharArray()) {
+			sets.add(KIndex.get(c));
+		}
+		
+		Collections.sort(sets, HashSetComparator);
+		HashSet<IVertex<K>> intersection = new HashSet<IVertex<K>>(sets.get(0));
+		for (int i = 1; i<suffix.length(); i++) {
+			intersection.retainAll(sets.get(i));
+		}
+		
+		return intersection;
 	}
-	
+
 	public int V() {
 		return V;
 	}
@@ -127,11 +159,7 @@ public class DiGraph<K> implements IDiGraph<K> {
 
 	public Collection<IVertex<K>> vertices() {
 		return vertices.values();
-	}
-		
-	public Map<Character, HashSet<IVertex<K>>> getIndex(){
-		return this.Index;
-	}
+	}	
 
 	@Override
 	public String toString() {
@@ -144,7 +172,7 @@ public class DiGraph<K> implements IDiGraph<K> {
 		.append(V).append("\nE=").append(E).append("");
 		return builder.toString();
 	}
-	
+
 	public IVertex<K> getByValue(K k) {
 		return vertices.get(k);
 	}
