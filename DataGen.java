@@ -23,7 +23,7 @@ public class DataGen {
 
 	public boolean generateData(int size, int keylength, String type) throws IOException {
 		setAlphabet(type);
-		filename = size + "_" +  alphabetname + "_" + keylength +  "_output.txt";
+		filename = size + "_" + alphabetname + "_" + keylength +  "_output.txt";
 		
 		try {
 		FileOutputStream fos = new FileOutputStream(filename);
@@ -98,19 +98,19 @@ public class DataGen {
 	private static String gethelp() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("*********************************************************************************\n");
-		sb.append("*										*\n");
-		sb.append("*	USAGE									*\n");
-		sb.append("*	java DataGen -size [int>0] -ksize [int>0] -ktype [{w,d,wd}]: 		*\n");
-		sb.append("*	-size: size of the input. An integer > 0 				*\n");
-		sb.append("*	-ksize: length of key. 							*\n");
-		sb.append("*	-ktype: the character class of the key. 				*\n");
-		sb.append("*	w = [a-z], d = [0-9], wd = [a-z0-9] 					*\n");
-		sb.append("*										*\n");
-		sb.append("*	Example: Datafile with 10000 entries. Key is 5 alphanumeric chars	*\n");
-		sb.append("*	java DataGen -size 10000 -ksize 5 -ktype wd				*\n");
-		sb.append("*										*\n");
-		sb.append("*********************************************************************************\n");
+		sb.append("*************************************************************************\n");
+		sb.append("* 									*\n");
+		sb.append("* USAGE									*\n");
+		sb.append("* java DataGen -size [int>0] -ksize [int>0] -ktype [{w,d,wd}]: 		*\n");
+		sb.append("* -size: size of the input. An integer > 0 				*\n");
+		sb.append("* -ksize: length of key. 						*\n");
+		sb.append("* -ktype: the character class of the key. 				*\n");
+		sb.append("* w = [a-z], d = [0-9], wd = [a-z0-9] 					*\n");
+		sb.append("* 									*\n");
+		sb.append("* Example: Datafile with 10000 entries. Key is 5 alphanumeric chars	*\n");
+		sb.append("* java DataGen -size 10000 -ksize 5 -ktype wd				*\n");
+		sb.append("* 									*\n");
+		sb.append("*************************************************************************\n");
 		return sb.toString();
 	}
 }

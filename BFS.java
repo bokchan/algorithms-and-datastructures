@@ -1,10 +1,8 @@
-package wordladder;
+
 
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 /***
  * Based on Sedgewick and Wayne's Breadth Search First. 
  * Adapted to search in a digraph with generic vertices   
@@ -13,17 +11,14 @@ import java.util.Set;
  * @param <K>
  */
 public class BFS<K> {
-
 	private static final int INFINITY = Integer.MAX_VALUE;
 	private Map<IVertex<K>, Boolean> marked; // marked[v] = is there an s->v path?
-	private Set<IVertex<K>> marked2; // marked[v] = is there an s->v path?
 	private Map<IVertex<K>, IVertex<K>> edgeTo; // edgeTo[v] = last edge on shortest s->v path
 	private Map<IVertex<K>, Integer> distTo; // distTo[v] = length of shortest s->v path
 	private final IVertex<K> s; // the source
 
 	public BFS(IDiGraph<K> G, IVertex<K> s) {
 		marked = new HashMap<IVertex<K>, Boolean>();
-		marked2 = new HashSet<IVertex<K>>(); 
 		distTo = new HashMap<IVertex<K>, Integer>();
 		edgeTo = new HashMap<IVertex<K>, IVertex<K>>();
 		
@@ -32,6 +27,7 @@ public class BFS<K> {
 			distTo.put(v, INFINITY);
 			edgeTo.put(v, null);
 		}
+		
 		this.s = s;
 		bfs(G, s);
 	}
@@ -39,19 +35,16 @@ public class BFS<K> {
 	private void bfs(IDiGraph<K> G, IVertex<K> s) {
 		Queue<IVertex<K>> q = new Queue<IVertex<K>>();
 		marked.put(s,true);
-		marked2.add(s);
 		distTo.put(s,0);
 		q.enqueue(s);
 		while (!q.isEmpty()) {
 			IVertex<K> v = q.dequeue();
 			for (IVertex<K> w : G.adj(v)) {
-				//if (!marked.get(w)) {
-				if (!marked.containsKey(w)) {
+				if (!marked.get(w)) {
 					edgeTo.put(w,v);
 					int d = distTo.get(v) + 1;
 					distTo.put(w, d);
-					//marked.put(w,true);
-					marked2.add(w);
+					marked.put(w,true);
 					q.enqueue(w);
 				}
 			}

@@ -1,0 +1,34 @@
+Building Digraph...0.54
+Vertices: 20000
+Edges: 0
+Building Digraph...0.883
+Vertices: 40000
+Edges: 0
+Building Digraph...1.211
+Vertices: 60000
+Edges: 0
+Building Digraph...2.099
+Vertices: 80000
+Edges: 0
+Building Digraph...2.926
+Vertices: 100000
+Edges: 0	
+
+------------------------
+
+Building Digraph...0.452
+Vertices: 20000
+Edges: 0
+Building Digraph...0.741
+Vertices: 40000
+Edges: 0
+Building Digraph...1.022
+Vertices: 60000
+Edges: 0
+Building Digraph...1.24
+Vertices: 80000
+Edges: 0
+Building Digraph...1.599
+Vertices: 100000
+Edges: 0
+

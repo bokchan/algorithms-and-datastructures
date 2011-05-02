@@ -57,7 +57,7 @@ public class DiGraph<K> implements IDiGraph<K> {
 			String s = r.readLine();
 			if (s == null) break;
 			s = s.toLowerCase(); 
-			Vertex<K> v = new Vertex<K>((K) s); // Create a new vertex 
+			Vertex<K> v = new Vertex<K>((K) s, 4); // Create a new vertex 
 			vertices.put((K)s,v);
 
 			ArrayList<Character> vArray = v.getValueArray();
