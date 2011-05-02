@@ -14,7 +14,16 @@ public class Vertex<K> implements IVertex<K>{
 
 	private Set<IVertex<K>> adj;
 	private int subKeySize = 4; 
+	
 	public Vertex(K value) {
+		create(value);
+	}
+	public Vertex(K value, int size) {
+		this.subKeySize = size;
+		create(value);
+	}
+	
+	private void create(K value) {
 		adj = new HashSet<IVertex<K>>(); 
 		this.value = value;
 		// Create auxillary arrays
@@ -24,7 +33,7 @@ public class Vertex<K> implements IVertex<K>{
 		
 		suffixArray = this.value.toString().substring(valueArray.size()-subKeySize,valueArray.size()).toCharArray();		
 		Arrays.sort(suffixArray);
-	}
+	}  
 
 	public boolean isNeighbour(IVertex<K> v) 
 	{
