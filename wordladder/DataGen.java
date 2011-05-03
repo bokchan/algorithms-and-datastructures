@@ -1,6 +1,4 @@
 package wordladder;
-
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ public class DataGen {
 
 	public boolean generateData(int size, int keylength, String type) throws IOException {
 		setAlphabet(type);
-		filename = size + "_" +  alphabetname + "_" + keylength +  "_output.txt";
+		filename = size + "_" + alphabetname + "_" + keylength +  "_output.txt";
 		
 		try {
 		FileOutputStream fos = new FileOutputStream(filename);

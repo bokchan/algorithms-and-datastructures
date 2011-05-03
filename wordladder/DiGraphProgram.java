@@ -5,10 +5,14 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 public class DiGraphProgram {
 	private static String dir = System.getProperty("user.dir");
@@ -17,51 +21,107 @@ public class DiGraphProgram {
 	 * @param args
 	 * @throws IOException 
 	 */
+	
+	class VertexTest<K> implements Comparable<VertexTest<K>>{
+		private IVertex<K> source; 
+		private HashMap<IVertex<K>, Integer> targets ;
+		
+		Comparator<Map.Entry<IVertex<K>, Integer>> resComp = new Comparator<Map.Entry<IVertex<K>,Integer>>() {
+			public int compare(Map.Entry<IVertex<K>, Integer> o1,
+					Map.Entry<IVertex<K>, Integer> o2) {
+				return o1.getValue().compareTo(o2.getValue());
+			}
+		};
+		
+		public VertexTest(IVertex<K> s) {
+			this.source = s;
+			targets = new HashMap<IVertex<K>, Integer>();
+		}
+
+		public void addTarget(IVertex<K> t) {
+			targets.put(t,-1);
+		}
+
+		public int compareTo(VertexTest<K> o) {
+			return this.source.compareTo(o.source);
+		}
+		public void addResult(IVertex<K> v, int dist) {
+			targets.put(v, dist);
+		} 
+
+		public Collection<IVertex<K>> getTargets() {
+			return targets.keySet();
+		} 
+		
+		public List<Entry<IVertex<K>, Integer>> getResults() {
+			List<Entry<IVertex<K>, Integer>> list = new ArrayList<Map.Entry<IVertex<K>,Integer>>( targets.entrySet() );
+			Collections.sort(list, resComp);
+			return list;
+		}
+	}
+	
+	Comparator<VertexTest<String>> testComp= new Comparator<VertexTest<String>>() {
+		public int compare(VertexTest<String> o1,
+				VertexTest<String> o2) {
+			return o1.source.compareTo(o2.source);
+		}
+	};
+
+	public DiGraphProgram(String datafile, String testfile) throws IOException {
+		// Init new digraph
+		DiGraph<String> dg = new DiGraph<String>();
+		dg.buildGraph(datafile);
+
+		HashMap<String, VertexTest<String>> tests = new HashMap<String, VertexTest<String>>();
+		BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(testfile), "UTF-8"));
+
+		// Read test file
+		while(true) {
+			String str = r.readLine();
+			if (str == null || str.length() == 0) break;
+			String[] sa =  str.split(" ");
+
+			IVertex<String> source = dg.getByValue(sa[0]);
+			IVertex<String> target = dg.getByValue(sa[1]);
+			// Add source and target to the collection of tests
+			// It ensures that BFS is only performed once for tests with the same source
+			if (!tests.containsKey(source.getValue())) {
+				tests.put(source.getValue(), new VertexTest<String>(source));
+			}
+			tests.get(source.getValue()).addTarget(target);
+		}
+
+		for (VertexTest<String> test : tests.values()) {
+			BFS<String> bfs = new BFS<String>(dg, test.source);
+			for (IVertex<String> t : test.getTargets()) {
+				test.addResult(t, bfs.distTo(t));
+			}
+		}
+
+		ArrayList<VertexTest<String>> printlist = new ArrayList<VertexTest<String>>(tests.values());
+		Collections.sort(printlist, testComp);
+		
+		for (VertexTest<String> test : printlist) {
+			for (Entry<IVertex<String>, Integer> result: test.getResults()) {
+				System.out.printf("Dist from %s to %s : %s\n", test.source.getValue(), result.getKey().getValue(), result.getValue());
+			} 
+		}
+	}
+
 	public static void main(String[] args) throws IOException {
 		if (args.length == 2) {  
 			String datafile = dir + fileSep + args[0];
 			String testfile = dir + fileSep + args[1];
-			
-			// Init new digraph
-			DiGraph<String> dg = new DiGraph<String>();
-			dg.buildGraph(datafile);
-			
-			SortedMap<IVertex<String>, HashSet<IVertex<String>>> tests = new TreeMap<IVertex<String>, HashSet<IVertex<String>>>();
-			
-			BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(testfile), "UTF-8"));
-			
-			// Read test file
-			while(true) {
-				String str = r.readLine();
-				if (str == null || str.length() == 0) break;
-				String[] sa =  str.split(" ");
+			DiGraphProgram dgp = new DiGraphProgram(datafile, testfile);
 
-				IVertex<String> source = dg.getByValue(sa[0]);
-				IVertex<String> target = dg.getByValue(sa[1]);
-				// Add source and target to the collection of tests
-				// It ensures that BFS is only performed once for tests with the same source     
-				HashSet<IVertex<String>> targets  = null;
-				if ((targets = tests.get(source)) == null) {
-					tests.put(source, new HashSet<IVertex<String>>());
-					targets = tests.get(source);
-				}
-				targets.add(target);
-				
-			}
-			BFS<String> bfs;
-			for (Entry<IVertex<String>,HashSet<IVertex<String>>> e : tests.entrySet()) {
-				bfs  = new BFS<String>(dg, e.getKey());
-				for (IVertex<String> t : e.getValue())
-				System.out.printf("Dist from %s to %s : %s\n", e.getKey().getValue(), t.getValue(), bfs.distTo(t));
-			}
 		} else {
 			System.out.println(gethelp());
 		}
 	}
-	
+
 	private static String gethelp() {
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("********************************************************************\n");
 		sb.append("* 								   *\n");
 		sb.append("* USAGE								   *\n");
@@ -76,8 +136,6 @@ public class DiGraphProgram {
 		sb.append("* java -cp Wordladder DataGen					   *\n");
 		sb.append("* 								   *\n");
 		sb.append("********************************************************************\n");
-		
-		
 		return sb.toString();
 	} 
 }
