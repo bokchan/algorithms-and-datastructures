@@ -59,8 +59,6 @@ public class DiGraphProgram {
 		}
 	}
 	
-	 
-
 	Comparator<VertexTest<String>> testComp= new Comparator<VertexTest<String>>() {
 		public int compare(VertexTest<String> o1,
 				VertexTest<String> o2) {

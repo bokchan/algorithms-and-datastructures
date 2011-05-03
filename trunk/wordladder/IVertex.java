@@ -1,7 +1,5 @@
 package wordladder;
-
-
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 public interface IVertex<K> extends Comparable<IVertex<K>>{
@@ -20,7 +18,7 @@ public interface IVertex<K> extends Comparable<IVertex<K>>{
 	 * Returns the vertice's value as a sorted char array   
 	 * @return
 	 */
-	public ArrayList<Character> getValueArray();
+	public char[] getValueArray();
 	/***
 	 * Returns the vertice's suffix as a sorted char array
 	 * @return
@@ -36,4 +34,8 @@ public interface IVertex<K> extends Comparable<IVertex<K>>{
 	 * @param w
 	 */
 	public void addEdge(IVertex<K> w) ;
+	
+	public boolean hasDuplicateChars();
+	
+	public HashMap<Character, Integer> getVTable();
 }

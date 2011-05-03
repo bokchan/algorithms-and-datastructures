@@ -50,8 +50,9 @@ public class DepthFirstDirectedPaths {
 		if (!hasPathTo(v))
 			return null;
 		Stack<Integer> path = new Stack<Integer>();
-		for (int x = v; x != s; x = edgeTo[x])
+		for (int x = v; x != s; x = edgeTo[x]) {
 			path.push(x);
+		}
 		path.push(s);
 		return path;
 	}

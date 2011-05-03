@@ -28,7 +28,6 @@ public class Digraph {
 	private final int V;
 	private int E;
 	private Bag<Integer>[] adj;
-
 	/**
 	 * Create an empty digraph with V vertices.
 	 */

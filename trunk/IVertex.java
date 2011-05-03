@@ -1,5 +1,5 @@
 import java.util.HashMap;
-import java.util.Set;
+import java.util.List;
 
 public interface IVertex<K> extends Comparable<IVertex<K>>{
 	/***
@@ -12,19 +12,9 @@ public interface IVertex<K> extends Comparable<IVertex<K>>{
 	 * Returns the adjacencylist
 	 * @return
 	 */
-	public Set<IVertex<K>> adj();
+	public List<IVertex<K>> adj();
 	/***
 	 * Returns the vertice's value as a sorted char array   
-	 * @return
-	 */
-	public char[] getValueArray();
-	/***
-	 * Returns the vertice's suffix as a sorted char array
-	 * @return
-	 */
-	public char[] getSuffixArray();
-	/***
-	 * Returns the value of the vertice
 	 * @return
 	 */
 	public K getValue();
@@ -34,5 +24,8 @@ public interface IVertex<K> extends Comparable<IVertex<K>>{
 	 */
 	public void addEdge(IVertex<K> w) ;
 	
-	public HashMap<Character, Integer> getVTable();
+	public boolean hasDuplicateChars();
+	
+	public HashMap<Character, Integer> getValueTable();
+	public HashMap<Character, Integer> getSuffixTable();
 }

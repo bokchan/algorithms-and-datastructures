@@ -1,72 +1,78 @@
 package wordladder;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class Vertex<K> implements IVertex<K>{
-
 	private K value;
 	private char[] suffixArray;
-	private ArrayList<Character> valueArray;
+	private char[] valueArray;
+	private HashMap<Character, Integer> valueTable;
+	private HashMap<Character, Integer> suffixTable;
+	private boolean hasDuplicates= false;
+	private int threshold = 0; 
 
 	private Set<IVertex<K>> adj;
-	private int subKeySize = 4; 
-	
-	public Vertex(K value) {
+	private int subKeySize = 4;
+
+	public Vertex(K value) {	 
 		create(value);
 	}
 	public Vertex(K value, int size) {
 		this.subKeySize = size;
 		create(value);
 	}
-	
+
 	private void create(K value) {
-		adj = new HashSet<IVertex<K>>(); 
+		if (value.toString().length()- subKeySize < 0) this.subKeySize = value.toString().length();
+		adj = new HashSet<IVertex<K>>(); // lazy
 		this.value = value;
 		// Create auxillary arrays
-		char[] tmp = this.value.toString().toCharArray(); 
-		Arrays.sort(tmp);
-		valueArray =  cloneCharArray(tmp);
-		
-		suffixArray = this.value.toString().substring(valueArray.size()-subKeySize,valueArray.size()).toCharArray();		
+		valueArray = this.value.toString().toCharArray();
+		suffixArray = Arrays.copyOfRange(valueArray, valueArray.length-subKeySize, valueArray.length);   
+		Arrays.sort(valueArray);
 		Arrays.sort(suffixArray);
+
+		valueTable = new HashMap<Character, Integer>();
+		suffixTable = new HashMap<Character, Integer>();
+
+		for (Character c : valueArray) {
+			if (!valueTable.containsKey(c))
+				valueTable.put(c, 0);
+			Integer c1 = valueTable.get(c);
+			c1++;
+			valueTable.put(c, c1);
+		}
+
+		for (Character c : suffixArray) {
+			if (!suffixTable.containsKey(c))  
+				suffixTable.put(c, 1); 
+			else { 
+				hasDuplicates= true;
+				Integer c2 = suffixTable.get(c);
+				c2++;
+				suffixTable.put(c, c2);
+			}
+		}
+		threshold =  this.valueArray.length-subKeySize < 0 ? 0 : this.valueArray.length-subKeySize;
 	}  
 
-	public boolean isNeighbour(IVertex<K> v) 
-	{
+	public boolean isNeighbour(IVertex<K> v) {
 		int similarity = 0;
-		// Clone of the v's char array value
-		List<Character> vCopy = new ArrayList<Character>(v.getValueArray());
-		
+		HashMap<Character, Integer> vCopy =  v.getVTable();
 		int fail = 0;
-		int threshold = this.valueArray.size()-subKeySize;
-		for (int i = 0; i< this.suffixArray.length; i++) 
+		for (Entry<Character, Integer> e : suffixTable.entrySet()) 
 		{
-			if (fail>threshold) break; // Stop the search if number of fails exceeds 1 
-			char key =  this.suffixArray[i]; // get the key 
-			// Decide whether to use binary search or 'contains'   
-			if (this.valueArray.size()>5)  
-			{
-				if (Collections.binarySearch(vCopy, key) >=0) {
-					similarity++;
-					vCopy.remove((Object)key);
-				} else fail++;
-			} else	
-			{ 
-				if (vCopy.contains(key)) 
-				{
-					similarity++;
-					vCopy.remove((Object)key);
-				} else fail++;
-			}
-			
+			if (fail>threshold) break; // Stop the search if number of fails exceeds 1
+			if (e.getValue() <= vCopy.get(e.getKey())) {
+				similarity+=e.getValue();
+			} else fail++;
 		}
 		return similarity >=subKeySize;
 	}
-	
+
 	public Set<IVertex<K>> adj() {
 		return this.adj;
 	}
@@ -75,7 +81,7 @@ public class Vertex<K> implements IVertex<K>{
 		return this.suffixArray;
 	}
 
-	public ArrayList<Character> getValueArray() {
+	public char[] getValueArray() {
 		return this.valueArray;
 	}
 
@@ -95,18 +101,20 @@ public class Vertex<K> implements IVertex<K>{
 	}
 
 	public void addEdge(IVertex<K> w) {
+
 		this.adj.add(w);
-	}
-	
-	private ArrayList<Character> cloneCharArray(char[] ca) {
-		ArrayList<Character> obj = new ArrayList<Character>();
-		for (int i =0; i<ca.length; i++) {
-			obj.add(ca[i]);
-		}
-		return obj;
 	}
 
 	public int compareTo(IVertex<K> o) {
 		return this.getValue().toString().compareTo(o.getValue().toString());
 	}
+
+	public HashMap<Character, Integer> getVTable() {
+		return this.valueTable;
+	}
+	public boolean hasDuplicateChars() {
+		return hasDuplicates;
+	}
+
+
 }

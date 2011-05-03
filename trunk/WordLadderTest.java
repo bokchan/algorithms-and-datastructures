@@ -1,52 +1,27 @@
-
-
 import java.io.IOException;
 import java.util.BitSet;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 public class WordLadderTest {
-	@Test
-	public void TestCompare() {
-		Vertex<String> v1 = new Vertex<String>("there");
-		Vertex<String> v2 = new Vertex<String>("there");
-		Integer i = 1;
-		Integer j = 2;
-		System.out.println(v1.compareTo(v2));
-		System.out.println(i.compareTo(j));
-	}
-
-	@Test 
-	public void TestMeanDFSTime() throws IOException {
-		String dir = System.getProperty("user.dir");
-
-		System.out.println("Building Digraph");
-		Stopwatch w = new Stopwatch();
-		DiGraph<String> dg = null;
-		for (int i = 0; i < 5; i++) {
-			dg = new DiGraph<String>(4);
-			dg.buildGraph(dir + "\\trunk\\wordladder\\ressources\\words-15046-data.txt");
-		} 
-		System.out.println("Mean buildtime DFS: " + w.elapsedTime()/5);
-		System.out.println("Vertices: " + dg.V());
-		System.out.println("Edges: " + dg.E());
-		System.out.println("Calls during build: " + dg.count);
-	}
-
+	
 	@Test 
 	public void TestMeanIterTime() throws IOException {
+		int iterations = 1;
 		String dir = System.getProperty("user.dir");
 
 		System.out.println("Building Digraph");
 		Stopwatch w = new Stopwatch();
 		DiGraph<String> dg = null;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < iterations; i++) {
 			dg = new DiGraph<String>();
-			dg.buildGraph(dir + "\\trunk\\wordladder\\ressources\\words-15046-data.txt");
+			dg.buildGraph(dir + "\\trunk\\wordladder\\ressources\\200000_alpha_5_output.txt");
 		} 
-		System.out.println("Mean buildtime Iter: " + w.elapsedTime()/10);
+		System.out.println("Mean buildtime Iter: " + w.elapsedTime()/iterations);
 		System.out.println("Vertices: " + dg.V());
 		System.out.println("Edges: " + dg.E());
 		System.out.println("Calls during build: " + dg.count);
@@ -58,8 +33,8 @@ public class WordLadderTest {
 
 		Stopwatch w = new Stopwatch();
 		System.out.println("Building Digraph");
-		DiGraph<String> dg = new DiGraph<String>();
-		dg.buildGraph(dir + "\\trunk\\wordladder\\ressources\\200000_alpha_5_output.txt");
+		DiGraphThreaded<String> dg = new DiGraphThreaded<String>();
+		dg.buildGraph(dir + "\\trunk\\wordladder\\ressources\\alpha_100000_output.txt");
 		
 		System.out.println("Buildtime: " + w.elapsedTime());
 		System.out.println("Vertices: " + dg.V());
@@ -207,5 +182,23 @@ public class WordLadderTest {
 		System.out.println(ht);
 		ht.remove("AN");
 		System.out.println(ht);
+	}
+	
+	
+	@Test
+	public void TestRefs() {
+		String[] c = {"a","b", "c"};
+		System.out.println(c);
+		String[] b = c;
+		System.out.println(b);
+		b = null;
+		System.out.println(c);
+		System.out.println(b);
+		
+		Set<Character> set = new HashSet<Character>();
+		String str = "abc";
+		for (char t : str.toCharArray())
+		set.add(t);
+		System.out.println("a".charAt(0));
 	}
 }

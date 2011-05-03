@@ -22,7 +22,7 @@ public class DirectedEdge {
 	private final int v;
 	private final int w;
 	private final double weight;
-
+	
 	/**
 	 * Create a directed edge from v to w with given weight.
 	 */

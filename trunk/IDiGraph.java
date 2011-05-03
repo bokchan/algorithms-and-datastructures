@@ -1,7 +1,7 @@
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 /***
  * Interface for an digraph holding vertices of type IVertex<K>
@@ -35,7 +35,7 @@ public interface IDiGraph<K> {
 	 * @param v
 	 * @return
 	 */
-	Set<IVertex<K>> adj(IVertex<K> v);
+	List<IVertex<K>> adj(IVertex<K> v);
 	
 	/***
 	 * Returens an iterable collection of vertices  
