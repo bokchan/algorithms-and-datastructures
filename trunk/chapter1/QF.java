@@ -16,7 +16,7 @@ public class QF {
 		return id[p] == id[q];
 	}
 	
-	public void unite(int p, int q) {
+	public void union(int p, int q) {
 		int pid = id[p];
 		count++;
 		for (int i=0; i < id.length; i++) {

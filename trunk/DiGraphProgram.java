@@ -9,10 +9,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 public class DiGraphProgram {
 	private static String dir = System.getProperty("user.dir");
 	private static String fileSep = System.getProperty("file.separator"); 
@@ -66,16 +66,47 @@ public class DiGraphProgram {
 		}
 	};
 
-	public DiGraphProgram(String datafile, String testfile) throws IOException {
+	public DiGraphProgram(HashMap<String, String> args) throws IOException {
 		// Init new digraph
-		DiGraph<String> dg = new DiGraph<String>();
-		dg.buildGraph(datafile);
-
+		System.out.println(args);
+		Stopwatch w = new Stopwatch();
+		double elapsed = 0.0;
+		IDiGraph<String> dg = null;
+		HashSet<String> boolVals = new HashSet<String>();
+		boolVals.add("1");
+		boolVals.add("T");
+		boolVals.add("TRUE");
+		boolean multicore = args.containsKey("mc") && boolVals.contains(args.get("mc").toUpperCase()); 
+		for(int t = 0; t < 3; t++){
+		if (multicore) 
+			dg = new DiGraphThreadedCarrot<String>();
+		else dg = new DiGraph<String>();
+		
+		dg.buildGraph(args.get("df"));
+		
+		System.out.println("Buildtime: " + (w.elapsedTime()- elapsed));
+		elapsed = w.elapsedTime();
+		System.out.println("Edges: " + dg.E());
+		}
+		System.out.println("Mean Buildtime: " + w.elapsedTime() / 3);
+//		if (args.containsKey("tf")) SearchGraph(dg, args.get("tf"));
+//		System.out.println("Search time: " +(w.elapsedTime()- elapsed));
+//		System.out.println("Total runtime: " +w.elapsedTime());
+//		System.out.println("Multicore: " + multicore);
+	}
+	
+	private void closeThreads() {
+		ThreadGroup root = Thread.currentThread().getThreadGroup().getParent();
+		root.destroy();
+	}
+	
+	private void SearchGraph(IDiGraph<String> dg, String filename) throws IOException{
+		
 		HashMap<String, VertexTest<String>> tests = new HashMap<String, VertexTest<String>>();
-		BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(testfile), "UTF-8"));
+		BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
 
 		// Read test file
-		while(true) {
+		while(true) {                                                                          
 			String str = r.readLine();
 			if (str == null || str.length() == 0) break;
 			String[] sa =  str.split(" ");
@@ -102,17 +133,19 @@ public class DiGraphProgram {
 		
 		for (VertexTest<String> test : printlist) {
 			for (Entry<IVertex<String>, Integer> result: test.getResults()) {
-				System.out.printf("Dist from %s to %s : %s\n", test.source.getValue(), result.getKey().getValue(), result.getValue());
+				//System.out.printf("Dist from %s to %s : %s\n", test.source.getValue(), result.getKey().getValue(), result.getValue());
 			} 
 		}
-	}
+	} 
 
 	public static void main(String[] args) throws IOException {
-		if (args.length == 2) {  
-			String datafile = dir + fileSep + args[0];
-			String testfile = dir + fileSep + args[1];
-			DiGraphProgram dgp = new DiGraphProgram(datafile, testfile);
-
+		HashMap<String, String> cmdargs = new  HashMap<String, String>();
+		for (String arg : args) {
+			String[] a = arg.split(":"); 
+			cmdargs.put(a[0], a[1]);
+		}
+		if (cmdargs.containsKey("df")) { 
+			new DiGraphProgram(cmdargs);
 		} else {
 			System.out.println(gethelp());
 		}
@@ -121,20 +154,22 @@ public class DiGraphProgram {
 	private static String gethelp() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("********************************************************************\n");
-		sb.append("* 								   *\n");
-		sb.append("* USAGE								   *\n");
-		sb.append("* Source							   *\n");
-		sb.append("* javac *.java 							   *\n");
-		sb.append("* java DiGraphProgram [datafilename] [testfilename]		   *\n");
-		sb.append("* 								   *\n");
-		sb.append("* Wordladder.jar						   *\n");
-		sb.append("* java -cp Wordladder DiGraphProgram [datafilename] [testfilename] *\n");
-		sb.append("*								   *\n");
-		sb.append("* DataGen tool 							   *\n");
-		sb.append("* java -cp Wordladder DataGen					   *\n");
-		sb.append("* 								   *\n");
-		sb.append("********************************************************************\n");
+		sb.append("*************************************************************\n");
+		sb.append("* 							    *\n");
+		sb.append("* USAGE							    *\n");
+		sb.append("* Source     				 	            *\n");
+		sb.append("* javac *.java				   	            *\n");
+		sb.append("* java DiGraphProgram df:[datafilename] tf:[testfilename]   *\n"); 
+		sb.append("* mc:[1/0,T/F,TRUE/FALSE] 				    *\n");
+		sb.append("* 					   		    *\n");
+		sb.append("* Wordladder.jar					    *\n");
+		sb.append("* java -cp Wordladder.jar DiGraphProgram df:[datafilename]  *\n");
+		sb.append("* tf:[testfilename] mc:[1/0,T/F,TRUE/FALSE]	            *\n");
+		sb.append("*							    *\n");
+		sb.append("* DataGen tool 					     	    *\n");
+		sb.append("* java -cp Wordladder.jar DataGen		            *\n");
+		sb.append("* 							    *\n");
+		sb.append("*************************************************************\n");
 		return sb.toString();
 	} 
 }

@@ -1,4 +1,4 @@
-package handins;
+package FileSE;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -72,9 +72,9 @@ public class FileSE3Test {
 	public void Test3( ) throws IOException {
 		
 		FileSE3 e = new FileSE3();
-		System.out.println("Indexing the bible...");
+		System.out.println("Indexing the 1 mil...");
 		Stopwatch w = new Stopwatch();
-		e.indexFile(".\\trunk\\wordladder\\ressources\\word_list_moby_all_moby_words.flat.txt");
+		e.indexFile(".\\trunk\\FileSE\\one_meelyun_sentences.txt");
 		HashMap<String, ArrayList<Integer>> words = (HashMap<String, ArrayList<Integer>>)e.getData();
 		FileWriter writer = new FileWriter("output_5.txt");
 		for(String s : words.keySet())
@@ -83,8 +83,6 @@ public class FileSE3Test {
 		
 		System.out.print("it took: " + w.elapsedTime() + "\n");
 	}
-	
-	
 	/***
 	 * Tests queries for three random words   
 	 * @throws IOException

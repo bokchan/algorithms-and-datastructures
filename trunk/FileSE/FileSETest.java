@@ -1,4 +1,4 @@
-package handins;
+package FileSE;
 
 import java.io.IOException;
 import java.util.Arrays;

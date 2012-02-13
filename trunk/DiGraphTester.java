@@ -35,7 +35,7 @@ public class DiGraphTester {
 				dg = new DiGraph<String>(i);
 				dg.buildGraph(path  + "5757_alpha_10_output.txt");
 			}
-			Object[] result = {"5757_alpha_10_output.txt", "TRUE", 10, i, dg.count, w.elapsedTime()/iterations, dg.V(), dg.E()};
+			Object[] result = {"5757_alpha_10_output.txt", "TRUE", 10, i, dg.getIterCount(), w.elapsedTime()/iterations, dg.V(), dg.E()};
 			writeresult(result); // Edges
 		}
 
@@ -46,7 +46,7 @@ public class DiGraphTester {
 				dg = new DiGraph<String>(i);
 				dg.buildGraph(path  + "5757_alpha_20_output.txt");
 			}
-			Object[] result = {"5757_alpha_20_output.txt", "TRUE", 20, i, dg.count, w.elapsedTime()/iterations, dg.V(), dg.E()};
+			Object[] result = {"5757_alpha_20_output.txt", "TRUE", 20, i, dg.getIterCount(), w.elapsedTime()/iterations, dg.V(), dg.E()};
 			writeresult(result); // Edges
 		}
 
@@ -99,7 +99,7 @@ public class DiGraphTester {
 		//resultsb = new StringBuilder();
 		for (int i = 21; i > 2; i--) {
 			
-			count = 2;
+			
 			String filename = "word_list_moby_crossword.txt";
 			w = new Stopwatch();
 			int E= 0;
@@ -112,7 +112,7 @@ public class DiGraphTester {
 				dg.buildGraph(path  + filename);
 				E = dg.E();
 				V= dg.V();
-				count2 = dg.count;
+				
 			} 
 			Object[] result = {count, filename, "FALSE", "2-21", "2-" + i, 10, count2, w.elapsedTime()/iterations, V,E};
 			System.out.println(Arrays.toString(result));
@@ -164,7 +164,7 @@ public class DiGraphTester {
 					writeresult("5", false); // keylength 
 					writeresult("4", false); // suffixlen
 					writeresult("10", false); // iterations
-					writeresult(dg.count, false);
+					writeresult(dg.getIterCount(), false);
 					writeresult(w.elapsedTime()/iterations, false); // buildtime 
 					writeresult(dg.V(), false); // Vertices 
 					writeresult(dg.E(), true); // Edges
@@ -184,7 +184,7 @@ public class DiGraphTester {
 				writeresult("5", false); // keylength 
 				writeresult("4", false); // suffixlen
 				writeresult("10", false); // iterations
-				writeresult(dg.count, false);
+				writeresult(dg.getIterCount(), false);
 				writeresult(w.elapsedTime()/iterations, false); // buildtime 
 				writeresult(dg.V(), false); // Vertices 
 				writeresult(dg.E(), true); // Edges
@@ -195,13 +195,6 @@ public class DiGraphTester {
 		fw.write(result.toString());
 		fw.close();
 	}
-	
-	@Test 
-	public void TestWrite() {
-		Object[] f = {1, 3, "ad", now()};
-		writeresult(f);
-		System.out.println(result.toString());
-	}  
 
 	private void writeresult(Object[] s) {
 		for (Object o:s ) result.append(String.valueOf(o) + ";");
@@ -234,8 +227,7 @@ public class DiGraphTester {
 			if (s.length() < minlength) {
 				minlength = s.length();
 				min = s;
-			}
-			
+			}			
 		}
 		
 		System.out.println("File: " + filename);
@@ -269,8 +261,5 @@ public class DiGraphTester {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
 		return sdf.format(cal.getTime());
-	}
-	
-	
-	 
+	} 
 }

@@ -1,5 +1,6 @@
 package wordladder;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
@@ -11,6 +12,7 @@ public class Vertex<K> implements IVertex<K>{
 	private char[] valueArray;
 	private HashMap<Character, Integer> valueTable;
 	private HashMap<Character, Integer> suffixTable;
+	private BitSet suffixBitMask;
 	private boolean hasDuplicates= false;
 	private int threshold = 0; 
 
@@ -28,6 +30,7 @@ public class Vertex<K> implements IVertex<K>{
 	private void create(K value) {
 		if (value.toString().length()- subKeySize < 0) this.subKeySize = value.toString().length();
 		adj = new HashSet<IVertex<K>>(); // lazy
+		suffixBitMask = new BitSet();
 		this.value = value;
 		// Create auxillary arrays
 		valueArray = this.value.toString().toCharArray();
@@ -49,7 +52,7 @@ public class Vertex<K> implements IVertex<K>{
 		for (Character c : suffixArray) {
 			if (!suffixTable.containsKey(c))  
 				suffixTable.put(c, 1); 
-			else { 
+			else {
 				hasDuplicates= true;
 				Integer c2 = suffixTable.get(c);
 				c2++;
@@ -63,6 +66,7 @@ public class Vertex<K> implements IVertex<K>{
 		int similarity = 0;
 		HashMap<Character, Integer> vCopy =  v.getVTable();
 		int fail = 0;
+		
 		for (Entry<Character, Integer> e : suffixTable.entrySet()) 
 		{
 			if (fail>threshold) break; // Stop the search if number of fails exceeds 1

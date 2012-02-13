@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="stdlib"/>
 	<classpathentry kind="src" path="trunk"/>
+	<classpathentry kind="src" path="stdlib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JUNIT"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/STDLIB"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Parallel"/>
+	<classpathentry kind="lib" path="trunk/compressedbitset-0.1.jar"/>
+	<classpathentry kind="lib" path="trunk/javaewah-0.2.jar"/>
+	<classpathentry kind="lib" path="trunk/extendedset_2.0.jar"/>
+	<classpathentry kind="lib" path="colt.jar"/>
+	<classpathentry kind="lib" path="concurrent.jar"/>
+	<classpathentry kind="lib" path="fastbit1.2.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaBDD"/>
+	<classpathentry kind="lib" path="hppc-0.4.0.jar"/>
+	<classpathentry kind="lib" path="antlr.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SCALA"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

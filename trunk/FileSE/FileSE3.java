@@ -1,4 +1,4 @@
-package handins;
+package FileSE;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -142,5 +142,4 @@ public class FileSE3 implements SEServer.SearchService {
 		SEServer server = new SEServer(8888, engine);
 		server.run();
 	}
-
 }

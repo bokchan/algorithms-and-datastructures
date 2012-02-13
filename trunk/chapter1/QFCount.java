@@ -24,7 +24,7 @@ public class QFCount {
 			int p = in.readInt();
 			int q = in.readInt();
 			if (!qf.find(p, q)) 
-				qf.unite(p, q);
+				qf.union(p, q);
 			StdOut.println("# of array accesses: " + qf.getArrayAccessCount());
 			
 		}
