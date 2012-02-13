@@ -1,7 +1,7 @@
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /***
  * Interface for an digraph holding vertices of type IVertex<K>
@@ -14,7 +14,9 @@ public interface IDiGraph<K> {
 	 * @param filename 
 	 * @throws IOException
 	 */
-	void buildGraph(String filename) throws IOException;
+	void 
+	buildGraph(String filename) throws IOException;
+	
 	/***
 	 * Returns number of vertices 
 	 * @return
@@ -41,7 +43,7 @@ public interface IDiGraph<K> {
 	 * Returens an iterable collection of vertices  
 	 * @return
 	 */
-	Collection<IVertex<K>> vertices();
+	List<IVertex<K>> vertices();
 	
 	/***
 	 * Returns a vertice with value k  
@@ -57,4 +59,5 @@ public interface IDiGraph<K> {
 	 * @return
 	 */
 	boolean hasPath(IVertex<K> v,IVertex<K> w);
+	List<IVertex<K>> getIntersection(Set<Character> suffix, List<IVertex<K>> gIntersection);	
 }

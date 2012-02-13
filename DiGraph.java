@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,28 +23,32 @@ public class DiGraph<K> implements IDiGraph<K> {
 	private Map<K,Integer> vIndex; //
 	private BitSet bIntersection;
 	private List<IVertex<K>> intersection;
+	private final char[] CharacterSet = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}; 
 
-	int count = 0;
+	private static long addedBulk = 0L;
+	private static long addedIter = 0L;  
 	// Aux 
 	private HashMap<Character, BitSet> CIndex;
-	private int E; // Number of edges 
-	private int V; // Number of vertices
+	private int E = 0; // Number of edges 
+	private int V = 0; // Number of vertices
 
 	private int subkeysize = 4;
 	public DiGraph() {
-
 		init();
 	}
 	public DiGraph(int size) {
-		this.subkeysize = size;
+		this.subkeysize = size;	
 		init();
 	}
 
 	private void init() {
+		addedBulk = 0;
+		addedIter = 0;
 		// Initialize variables
 		vertices = new ArrayList<IVertex<K>>();
 		vIndex = new HashMap<K, Integer>();
-		CIndex = new HashMap<Character, BitSet>(36);
+		CIndex = new HashMap<Character, BitSet>();
+		for (char c : CharacterSet) CIndex.put(c, new BitSet());
 		bIntersection = new BitSet();
 		intersection = new ArrayList<IVertex<K>>();
 	}
@@ -90,6 +93,7 @@ public class DiGraph<K> implements IDiGraph<K> {
 
 	private void index(IVertex<K> v) {
 		for (Character  c : v.getValueTable().keySet()) {
+			//CIndex.get(c).set(V);
 			BitSet bs = CIndex.get(c); 
 			if (bs == null) {
 				CIndex.put(c, new BitSet());
@@ -104,20 +108,22 @@ public class DiGraph<K> implements IDiGraph<K> {
 		for (IVertex<K> v : vertices) {
 			doIntersection(v.getSuffixTable().keySet());
 			intersection.remove(v);
-			if (!v.hasDuplicateChars()) {
-				v.adj().addAll(intersection);
-				E+= intersection.size();
-			}
-			else {  
-				for (IVertex<K> i : intersection) {
-					count++;
-					if (v.isNeighbour(i)) {
-						E++;
-						v.addEdge(i);
+			if (intersection.size()> 0) {
+				if (!v.hasDuplicateChars()) {
+					addCalls(intersection.size(), true);
+					v.addEdge(intersection);
+					E+= intersection.size();
+				}
+				else {  
+					for (IVertex<K> i : intersection) {
+						if (v.isNeighbour(i)) {
+							addCalls(1, false);
+							E++;
+							v.addEdge(i);
+						}
 					}
 				}
 			}
-			
 		}
 	}
 
@@ -142,13 +148,18 @@ public class DiGraph<K> implements IDiGraph<K> {
 			intersection.add(vertices.get(i));
 		}
 	}
-	
+
 	public int V() {
 		return V;
 	}
 
 	public int E() {
 		return E;
+	}
+	
+	private void addCalls(int i, boolean isBulk) {		
+		if (isBulk) addedBulk += i;
+		else addedIter += i;
 	}
 
 	public void addEdge(IVertex<K> v, IVertex<K> w) {
@@ -164,7 +175,7 @@ public class DiGraph<K> implements IDiGraph<K> {
 		return bfs.hasPathTo(w);
 	}
 
-	public Collection<IVertex<K>> vertices() {
+	public List<IVertex<K>> vertices() {
 		return vertices;
 	}
 
@@ -183,4 +194,20 @@ public class DiGraph<K> implements IDiGraph<K> {
 	public IVertex<K> getByValue(K k) {
 		return vertices.get(vIndex.get(k));
 	}
+	
+	public List<IVertex<K>> getIntersection(Set<Character> suffix, List<IVertex<K>> gIntersection) {
+		throw new UnsupportedOperationException(); 
+	}
+
+	public List<IVertex<K>> getIntersection(Set<Character> suffix) {
+		throw new UnsupportedOperationException(); 
+	}
+	
+	public static long getBulkCount() {
+		return addedBulk;
+	} 
+	
+	public static long getIterCount() {
+		return addedIter;
+	} 
 }

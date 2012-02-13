@@ -1,7 +1,5 @@
 package wordladder;
 
-
-
 import java.util.HashMap;
 import java.util.Map;
 /***
@@ -27,6 +25,7 @@ public class BFS<K> {
 			marked.put(v, false);
 			distTo.put(v, INFINITY);
 			edgeTo.put(v, null);
+			
 		}
 		
 		this.s = s;

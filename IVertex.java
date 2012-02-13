@@ -23,6 +23,7 @@ public interface IVertex<K> extends Comparable<IVertex<K>>{
 	 * @param w
 	 */
 	public void addEdge(IVertex<K> w) ;
+	public void addEdge(List<IVertex<K>> w) ;
 	
 	public boolean hasDuplicateChars();
 	

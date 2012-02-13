@@ -1,12 +1,17 @@
 package wordladder;
 
 
+import it.uniroma3.mat.extendedset.intset.ConciseSet;
+
 import java.io.IOException;
 import java.util.BitSet;
-import java.util.Hashtable;
+
+import javaewah.EWAHCompressedBitmap;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import edu.princeton.cs.stdlib.StdRandom;
 
 public class WordLadderTest {
 	@Test
@@ -201,13 +206,24 @@ public class WordLadderTest {
 	}
 	
 	@Test
-	public void TestHashTable() {
-		Hashtable<String, Integer> ht = new Hashtable<String, Integer>();
-		ht.put("AN", 2);
-		ht.put("AN", 2);
-		ht.put("AN", 2);
-		System.out.println(ht);
-		ht.remove("AN");
-		System.out.println(ht);
+	public void TestBitSets() {
+		System.out.println("ewah: ");
+		EWAHCompressedBitmap ewahBitmap1 = new EWAHCompressedBitmap();
+		EWAHCompressedBitmap ewahBitmap2 = new EWAHCompressedBitmap();
+		
+		for (int i = 0; i<80000;i++) {
+			ewahBitmap1.set(StdRandom.uniform(1000000));
+			ewahBitmap2.set(StdRandom.uniform(1000000));
+		}		
+		
+		
+		EWAHCompressedBitmap xorbitmap = ewahBitmap1.xor(ewahBitmap2);
+		System.out.println("ewah: "  + xorbitmap.getPositions());
+		
+		ConciseSet cs1 = new ConciseSet();
+		cs1.add(3);
+		ConciseSet cs2 = new ConciseSet();
+		cs2.add(5);
+		System.out.println(cs1.intersection(cs2).size()> 0);
 	}
 }
